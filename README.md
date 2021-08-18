@@ -59,32 +59,31 @@ You have to define the following attributes
 - name(str): the name of your plugin (must be unique)
 - description(str): description of what your will plugin do, it will be displayed in the help CLI
 
-Implement the following abstract method and add the decorator ``classmethod``
+Implement the following abstract methods:
 
-- init_parser(parser: argparse.ArgumentParser): to configure the CLI arguments by using the standard library argparse
+- ``init_parser()``: to configure the CLI arguments by using the standard library argparse, use ``self.add_argument`` which is a wrapper for the original argparse method.
 - run: implement here the logic of your plugin, take any thing as parameters and must return an iterator of strings
-- cmd(args): must call the run functions based on the args arguments of argparse
+- cmd(args): must call the ``self.run`` method based on the ``args`` arguments of argparse
 
 Plugin Template
 
 ```python
+# path of this file: ~/koalak/wordlistools/plugins/myplugins.py
 import argparse
+import itertools
 from wordlistools import BaseTool
 
 
 class MyTool(BaseTool):
     name = "myplugin"
-    description = "Do nothing"
+    description = "Do nothing, return the same list"
 
-    @classmethod
-    def init_parser(cls, parser: argparse.ArgumentParser):
-        parser.add_argument("wordlists", help="return the same wordlist", nargs="+")
+    def init_parser(self):
+        self.add_argument("wordlists", help="wordlist to return", nargs="+")
 
-    @classmethod
     def cmd(cls, args):
         return cls.run(*args.wordlists)
 
-    @classmethod
     def run(cls, *wordlists):
         wordlists = cls.normalize_wordlists(wordlists)
         for e in itertools.chain(*wordlists):

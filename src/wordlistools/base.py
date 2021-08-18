@@ -5,6 +5,7 @@ from collections.abc import Iterable
 
 import koalak
 
+# Create the wordlistools framework with koalak
 wordlistools = koalak.mkframework("wordlistools")
 tools = wordlistools.mkpluginmanager("tools")
 

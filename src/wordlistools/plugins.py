@@ -350,6 +350,7 @@ class OccurrenceTool(BaseTool):
         self.add_argument(
             "-m", "--min", help="Minimum number of duplicate", default=1, type=int
         )
+
         # TODO: add possibility to not sort
 
     def cmd(self, args):
@@ -394,7 +395,7 @@ class SampleTool(BaseTool):
         # an other word from 50 to 100, ..., we take one word from each chunk
         # a chunk is the size of all wordlist / number of word
         #
-        # The problem is we can't split the file dependings on the words
+        # The problem is that we can't split the file depending on the words
         # we don't know where the words starts and stop, we can only seek
         # at an offset, so we will use the size of the file, seek at a random
         # position, and then ignore the current word to take the next one

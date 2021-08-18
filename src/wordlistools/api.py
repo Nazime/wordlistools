@@ -1,6 +1,7 @@
 from .base import tools
 
 
+# Class so that we can use all plugins with an API
 class API:
     def __init__(self):
         self.instances = {}

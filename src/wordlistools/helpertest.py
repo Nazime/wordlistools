@@ -1,3 +1,4 @@
+"""Helper class for unitest"""
 import io
 import tempfile
 from contextlib import redirect_stderr, redirect_stdout
