@@ -5,12 +5,12 @@ Wordlistools is a collection of tools to play with wordlists. This tool is meant
 
 - Can be used as command lines or as a python library
 - Can be used with stdin redirection ``|``
-- Easily extensible, you can add your own plugins on your home directory ```~/.koala/wordlistools/plugins```
+- Easily extensible, you can add your own plugins on your home directory ```~/.koalak/wordlistools/plugins```
 
 ```bash
 usage: wordlistool [-h] {product,minus,count,merge,search,match,backup,parse,split,sort,unique,duplicate,occurrence,sample} ...
 
-You can add your own plugin tools by adding a python script to /home/nazime/.koala/wordlistools/plugins
+You can add your own plugin tools by adding a python script to /home/nazime/.koalak/wordlistools/plugins
 
 positional arguments:
   {product,minus,count,merge,search,match,backup,parse,split,sort,unique,duplicate,occurrence,sample}
@@ -52,20 +52,18 @@ pip3 install wordlistools
 
 ## Add a tool
 
-You can easily add a plugin in wordlistools. Create a python file in ``~/fwm/wordlistools/plugins/`` and subclass ``BasePlugin``, wordlistools will automatically execute your script and register your plugin.
+You can easily add your own plugin in wordlistools. Create a python file in ``~/koalak/wordlistools/plugins/`` and subclass ``BasePlugin``, wordlistools will automatically execute your script and register your plugin.
 
-
-
-You have to define the following attribute
+You have to define the following attributes
 
 - name(str): the name of your plugin (must be unique)
-- description(str): description of what your plugin do, it will be displayed in arguments help
+- description(str): description of what your will plugin do, it will be displayed in the help CLI
 
 Implement the following abstract method and add the decorator ``classmethod``
 
-- run: implement here the logic of your plugin, take any thing as parameters and must return
-- help
-- init_parser
+- init_parser(parser: argparse.ArgumentParser): to configure the CLI arguments by using the standard library argparse
+- run: implement here the logic of your plugin, take any thing as parameters and must return an iterator of strings
+- cmd(args): must call the run functions based on the args arguments of argparse
 
 Plugin Template
 
@@ -75,12 +73,12 @@ from wordlistools import BaseTool
 
 
 class MyTool(BaseTool):
-    name = "my"
+    name = "myplugin"
     description = "Do nothing"
 
     @classmethod
     def init_parser(cls, parser: argparse.ArgumentParser):
-        parser.add_argument("wordlists", help="wordlist to product", nargs="+")
+        parser.add_argument("wordlists", help="return the same wordlist", nargs="+")
 
     @classmethod
     def cmd(cls, args):
@@ -89,5 +87,6 @@ class MyTool(BaseTool):
     @classmethod
     def run(cls, *wordlists):
         wordlists = cls.normalize_wordlists(wordlists)
-        yield from itertools.chain(*wordlists)
+        for e in itertools.chain(*wordlists):
+            yield e
 ```
