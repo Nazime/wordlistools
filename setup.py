@@ -18,7 +18,7 @@ def read(*parts):
 
 # Metadata
 NAME = "wordlistools"
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 LICENSE = "MIT"
 DESCRIPTION = "Tools to play with wordlists"
 LONG_DESCRIPTION = read("README.md")

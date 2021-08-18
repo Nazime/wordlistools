@@ -342,7 +342,6 @@ class DuplicateTool(BaseTool):
 class OccurrenceTool(BaseTool):
     name = "occurrence"
     description = "Show all duplicated words with their occurrences"
-    # TODO: add sort
 
     def init_parser(self):
         self.add_argument(
@@ -351,15 +350,20 @@ class OccurrenceTool(BaseTool):
         self.add_argument(
             "-m", "--min", help="Minimum number of duplicate", default=1, type=int
         )
+        # TODO: add possibility to not sort
 
     def cmd(self, args):
         return self.run(*args.wordlists, min=args.min)
 
-    def run(self, *wordlists, min: int = 1):
-        # FIXME: should return tuples?
+    def run(self, *wordlists, min: int = 1, sort=True):
+        # FIXME: should return tuples? find solution between API usage and cmd
         words = self.wordlists2words(*wordlists)
         words = Counter(words)
-        for word, occurrence in words.items():
+        if sort:
+            words = words.most_common()
+        else:
+            words = words.items()
+        for word, occurrence in words:
             if occurrence >= min:
                 yield f"{occurrence} {word}"
 

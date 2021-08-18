@@ -11,7 +11,7 @@ def test_simple():
     runtest(
         "occurrence",
         args=(AsStdinWordlist(["a", "b", "b"]),),
-        ret=AsWordlist(["1 a", "2 b"]),
+        ret=AsWordlist(["2 b", "1 a"]),
     )
 
     runtest(
@@ -23,8 +23,8 @@ def test_simple():
     # The first duplicate it will find is the 'b' and not the 'a'
     runtest(
         "occurrence",
-        args=(AsStdinWordlist(["a", "b", "b", "a", "a"]),),
-        ret=AsWordlist(["3 a", "2 b"]),
+        args=(AsStdinWordlist(["b", "a", "a", "b"]),),
+        ret=AsWordlist(["2 b", "2 a"]),
     )
 
     runtest(
@@ -53,5 +53,5 @@ def test_multiple_wordlists():
     runtest(
         "occurrence",
         args=(AsWordlist(["d", "b"]), AsStdinWordlist(["c", "b"])),
-        ret=AsWordlist(["1 d", "2 b", "1 c"]),
+        ret=AsWordlist(["2 b", "1 d", "1 c"]),
     )
