@@ -1,0 +1,30 @@
+notifications:
+  email: false
+language: python
+install:
+- pip install -e .[travis]
+matrix:
+  include:
+  - python: 3.7
+    env: TOXENV=docs
+  - python: 3.7
+    env: TOXENV=py37
+  - python: 3.6
+    env: TOXENV=py36
+  - python: 3.7
+    env: TOXENV=linting
+script:
+- tox
+after_success: codecov
+
+# Bad idea because it will run each time
+
+# deploy:
+#   provider: pypi
+#   # To have both sdist and wheel
+#   distributions: "sdist bdist_wheel"
+#   # to deploy once for all environments
+#   skip_existing: true
+#   user: "__token__"
+#   password:
+#    secure: "VO7LmpcgiJMocH0kxcw6mMF+K8NJ4VhKuZdoCZPHWtE393isHa90DhO4uxnH8m23vjAB2EHeIj8Y0G3KUmgCRFoEgyXyQmZoqKtQff0bnCAumLLaRvrmCqrjK0v+zmLMUiDCuOu1r6PpQo8ZTafXrWWZXdDowcRtqchjwVbBwQYZH57dEd/+JVIZfOTLwzSPvYrNTEKV3nHgV/hQeMypM4/JHCG8llpZZbWDO6k1LQIMjVb6R5+x2yzGurkLujFEZT9/epWovo78couxR8wGCDqEhdIghiMfpBtczSiRqomK0lut+ZDkxukJs/Up17iQAUPfIwXfU49kaF/dr/y5iIhA0/a335JwlZLjGKVYjrsA1FOBD+JqfVtub6Fw6ZZh4gvHeyIQOrMOTmeQwGRK9Iq29rIxDHnoktfZ/D4PtZu7lok7myUeMdw2iu+g2egROQzK9awQ8fkqjsGlq0CFzGKXtmnD6h6355TaERk3N49envYbXCB4N9gyMZ4mWZsGD2cpe/IgcosJM/7GLh5vFopG0szMqd7YDJeTwXpn1wu9JL72M8DYWxwMS33qKi2A+wT69Zl4XwNlunafi0NRyVoqfyl3rmJ4SUv8ocU9uTvvBgxW48Bi1HT9SfIGHSUOv/deZZTJB1qvV2xIhF30o1Mh392mhsEOFtmNZNKk8pA="
