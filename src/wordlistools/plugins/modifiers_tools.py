@@ -26,12 +26,10 @@ class UpperTool(BaseModifyTool):
     func = str.upper
 
 
-
 class LowerTool(BaseModifyTool):
     name = "lower"
     description = "Lower case all words in the wordlists"
     func = str.lower
-
 
 
 class CapitalizeTool(BaseModifyTool):
@@ -40,12 +38,12 @@ class CapitalizeTool(BaseModifyTool):
     func = str.capitalize
 
 
-
 class InvertTool(BaseModifyTool):
     name = "invert"
     description = "Invert all words in the wordlists"
-    func = lambda e:  e[::-1]
 
+    def func(self, e):
+        return e[::-1]
 
 
 class ReplaceTool(BaseTool):
