@@ -1,5 +1,5 @@
 from wordlistools.helpertest import AsStdinWordlist, AsWordlist, PolyArgument, runtest
-from wordlistools.plugins import red
+from wordlistools.plugins.filters_tools import red
 
 
 def test_color_false():

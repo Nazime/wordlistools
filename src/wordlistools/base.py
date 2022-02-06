@@ -13,9 +13,16 @@ tools = wordlistools.mkpluginmanager("tools")
 @tools.mkbaseplugin
 class BaseTool:
     description = tools.attr(type=str)
+    name = tools.attr(type=str)
+    group = "basic"
     nb_outputs = 1
 
     def __init__(self):
+        # Toos can have zero or one stdin argument
+        # stdin argument are arguments (related to wordlists) that
+        # can take their arguments from files or wordlist
+        # => That means that, if stdin is not empty (when using pip "|" for example)
+        # they will take args from stdin then from regular files
         self._parser = None
         self._usable_with_stdin = False
         self._stdin_arg = {}
@@ -55,7 +62,7 @@ class BaseTool:
         # print("add_argument", self.name, args, kwargs)
         stdin = kwargs.pop("stdin", False)
         # If we don't wait args from stdin
-        # or the argumentis not meant to be used with stdin
+        # or the argument is not meant to be used with stdin
         # we handle the argument normally
         if sys.stdin.isatty() or not stdin:
             self._parser.add_argument(*args, **kwargs)

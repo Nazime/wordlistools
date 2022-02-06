@@ -16,9 +16,18 @@ def read(*parts):
         return f.read()
 
 
+def get_version(rel_path):
+    for line in read(rel_path).splitlines():
+        if line.startswith("VERSION"):
+            delim = '"' if '"' in line else "'"
+            return line.split(delim)[1]
+    else:
+        raise RuntimeError("Unable to find version string.")
+
+
 # Metadata
 NAME = "wordlistools"
-VERSION = "0.1.2"
+VERSION = get_version("src/wordlistools/consts.py")
 LICENSE = "MIT"
 DESCRIPTION = "Tools to play with wordlists"
 LONG_DESCRIPTION = read("README.md")
@@ -48,7 +57,7 @@ CLASSIFIERS = [
 # Packages information
 PACKAGES = find_packages(where="src")
 PACKAGE_DIR = {"": "src"}
-INSTALL_REQUIRES = ["argcomplete", "colorama", "koalak"]
+INSTALL_REQUIRES = ["argcomplete", "colorama", "koalak>=0.2.10"]
 EXTRAS_REQUIRE = {
     "docs": ["sphinx"],
     "tests": [

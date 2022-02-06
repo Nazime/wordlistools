@@ -1,17 +1,8 @@
 import itertools
-import os
-import random
-import re
 import sys
 from collections import Counter
 
-import colorama
-
-from .base import BaseTool, parsers
-
-
-def red(text):
-    return f"{colorama.Fore.RED}{colorama.Style.BRIGHT}{text}{colorama.Style.RESET_ALL}"
+from wordlistools.base import BaseTool, parsers
 
 
 class ProductTool(BaseTool):
@@ -60,28 +51,6 @@ class MinusTool(BaseTool):
                 yield word
 
 
-class CountTool(BaseTool):
-    name = "count"
-    description = "Count the number of words in one or more wordlists"
-
-    def init_parser(self):
-        # FIXME: constraint, each argument must have a help!
-        self.add_argument("wordlists", help="Wordlists", stdin=True)
-        self.add_argument(
-            "-p", "--pattern", help="Count only word that match that pattern"
-        )
-
-    def cmd(self, args):
-        return self.run(args.wordlists, pattern=args.pattern)
-
-    def run(self, wordlist, *wordlists, pattern=None):
-        words = self.wordlists2words(wordlist, *wordlists)
-        if pattern is None:
-            return sum(1 for word in words)
-        else:
-            return sum(1 for word in words if pattern in word)
-
-
 class MergeTool(BaseTool):
     name = "merge"
     description = "Merge two or more wordlists"
@@ -97,71 +66,6 @@ class MergeTool(BaseTool):
 
     def run(self, wordlist1, wordlist2, *wordlists):
         yield from self.wordlists2words(wordlist1, wordlist2, *wordlists)
-
-
-class SearchTool(BaseTool):
-    name = "search"
-    description = "Search words in one or more wordlists with filename like pattern"
-
-    def init_parser(self):
-        self.add_argument("pattern", help="pattern to search for")
-        self.add_argument(
-            "wordlists", help="wordlist to product", nargs="+", stdin=True
-        )
-        self.add_argument_color()
-
-    def cmd(self, args):
-        # By default we check if it's connected to stdout
-        self.normalize_argument_color(args)
-        return self.run(args.pattern, *args.wordlists, color=args.color)
-
-    def run(self, pattern, wordlist, *wordlists, color=False):
-        words = self.wordlists2words(wordlist, *wordlists)
-
-        if color:
-            for word in words:
-                index = word.find(pattern)
-                if index != -1:
-                    end_index = len(pattern) + index
-                    yield f"{word[:index]}{red(word[index:end_index])}{word[end_index:]}"
-        else:
-            for word in words:
-                if pattern in word:
-                    yield word
-
-
-class MatchTool(BaseTool):
-    name = "match"
-    description = "Search words in one or more wordlists with regular expression"
-
-    def init_parser(self):
-        self.add_argument("pattern", help="pattern to search for")
-        self.add_argument(
-            "wordlists", help="wordlist to product", nargs="+", stdin=True
-        )
-        self.add_argument_color()
-
-    def cmd(self, args):
-        self.normalize_argument_color(args)
-        return self.run(args.pattern, *args.wordlists, color=args.color)
-
-    def run(self, pattern, wordlist, *wordlists, color=False):
-        obj = re.compile(pattern)
-        words = self.wordlists2words(wordlist, *wordlists)
-        if color:
-            for word in words:
-                search_obj = obj.search(word)
-                if search_obj:
-                    index, end_index = search_obj.span()
-                    if word[index:end_index]:
-                        yield f"{word[:index]}{red(word[index:end_index])}{word[end_index:]}"
-                    else:  # If word is empty return word without color
-                        # example re.search("a*", "b"), there is a match but the match is empty
-                        yield word
-        else:
-            for word in words:
-                if obj.search(word):
-                    yield word
 
 
 class BackupTool(BaseTool):
@@ -367,52 +271,3 @@ class OccurrenceTool(BaseTool):
         for word, occurrence in words:
             if occurrence >= min:
                 yield f"{occurrence} {word}"
-
-
-class SampleTool(BaseTool):
-    name = "sample"
-    description = "Output a random number of words from the wordlist"
-    # TODO: handle many wordlist (treat as merge)
-
-    def init_parser(self):
-        self.add_argument("wordlist", help="Wordlist")
-
-        self.add_argument(
-            "-n", "--number", help="Number of words to output", default=10, type=int
-        )
-
-    def cmd(self, args):
-        return self.run(args.wordlist, number=args.number)
-
-    def run(self, filepath: str, number=10):
-        # TODO: what if wordlist come from stdin
-        if not isinstance(filepath, str):
-            raise TypeError("RandomTool expect only files")
-
-        # Algo
-        # Let's say we have a wordlist of 500 words and we want to take randomly
-        # 10 words, the idea is we want to chose one word from 0 to 50,
-        # an other word from 50 to 100, ..., we take one word from each chunk
-        # a chunk is the size of all wordlist / number of word
-        #
-        # The problem is that we can't split the file depending on the words
-        # we don't know where the words starts and stop, we can only seek
-        # at an offset, so we will use the size of the file, seek at a random
-        # position, and then ignore the current word to take the next one
-        # ----
-
-        # size of file in bytes
-        size = os.stat(filepath).st_size
-        chunk_size = int(size / number)
-        f = open(filepath, errors="ignore")
-        i_word = 0
-        while i_word < number:
-            start_chunk = i_word * chunk_size
-            end_chunk = (i_word + 1) * chunk_size
-            start_word = random.randint(start_chunk, end_chunk)
-            # move file pointer
-            f.seek(start_word)
-            # don't take first line because we are probably in the middle of the word
-            _ = f.readline()
-            yield f.readline()[:-1]
-            i_word += 1
