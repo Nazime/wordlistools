@@ -145,5 +145,5 @@ class EndswithTool(BaseTool):
     def run(self, string, wordlist, *wordlists):
         words = self.wordlists2words(wordlist, *wordlists)
         for word in words:
-            if str.startswith(word, string):
+            if str.endswith(word, string):
                 yield word

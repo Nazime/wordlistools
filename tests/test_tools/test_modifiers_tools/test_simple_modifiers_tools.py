@@ -43,3 +43,18 @@ def test_invert():
         args=(AsStdinWordlist(["aAa", "bB", "a21", "azerty", "13", "a"]),),
         ret=AsWordlist(["aAa", "Bb", "12a", "ytreza", "31", "a"]),
     )
+
+
+def test_replace():
+
+    runtest(
+        "replace",
+        args=("a", "b", AsStdinWordlist(["Aa", "Bb", "b"])),
+        ret=AsWordlist(["Ab", "Bb", "b"]),
+    )
+
+    runtest(
+        "replace",
+        args=("test", "nop", AsStdinWordlist(["testtest", "testing", "tes"])),
+        ret=AsWordlist(["nopnop", "noping", "tes"]),
+    )
