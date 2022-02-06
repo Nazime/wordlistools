@@ -75,13 +75,6 @@ class MatchTool(BaseTool):
                     yield word
 
 
-def static(g):
-    def s_g(self, e):
-        return g(e)
-
-    return s_g
-
-
 class BaseFilterTool(BaseTool):
     group = "filters"
     abstract = True
@@ -98,16 +91,14 @@ class BaseFilterTool(BaseTool):
     def run(self, wordlist, *wordlists):
         words = self.wordlists2words(wordlist, *wordlists)
         for word in words:
-            if self.func(word):
+            if self.__class__.func(word):
                 yield word
 
 
 class IsdigitTool(BaseFilterTool):
     name = "isdigit"
     description = "Keep only digits"
-
-    def func(self, e):
-        return str.isdigit(e)
+    func = str.isdigit
 
 
 class StartswithTool(BaseTool):
