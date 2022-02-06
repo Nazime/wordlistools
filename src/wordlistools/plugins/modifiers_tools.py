@@ -17,39 +17,35 @@ class BaseModifyTool(BaseTool):
     def run(self, wordlist, *wordlists):
         words = self.wordlists2words(wordlist, *wordlists)
         for word in words:
-            yield self.func(word)
+            yield self.__class__.func(word)
 
 
 class UpperTool(BaseModifyTool):
     name = "upper"
     description = "Upper case all words in the wordlists"
+    func = str.upper
 
-    def func(self, e):
-        return str.upper(e)
 
 
 class LowerTool(BaseModifyTool):
     name = "lower"
     description = "Lower case all words in the wordlists"
+    func = str.lower
 
-    def func(self, e):
-        return str.lower(e)
 
 
 class CapitalizeTool(BaseModifyTool):
     name = "capitalize"
     description = "Capitalize all words in the wordlists"
+    func = str.capitalize
 
-    def func(self, e):
-        return str.capitalize(e)
 
 
 class InvertTool(BaseModifyTool):
     name = "invert"
     description = "Invert all words in the wordlists"
+    func = lambda e:  e[::-1]
 
-    def func(self, e):
-        return e[::-1]
 
 
 class ReplaceTool(BaseTool):
