@@ -1,3 +1,5 @@
+import inspect
+
 from wordlistools.base import BaseTool
 
 
@@ -16,8 +18,12 @@ class BaseModifyTool(BaseTool):
 
     def run(self, wordlist, *wordlists):
         words = self.wordlists2words(wordlist, *wordlists)
-        for word in words:
-            yield self.__class__.func(word)
+        if inspect.ismethoddescriptor(self.__class__.func):
+            for word in words:
+                yield self.__class__.func(word)
+        else:
+            for word in words:
+                yield self.func(word)
 
 
 class UpperTool(BaseModifyTool):

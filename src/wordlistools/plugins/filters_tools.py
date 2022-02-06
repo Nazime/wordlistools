@@ -1,3 +1,4 @@
+import inspect
 import re
 
 import colorama
@@ -90,9 +91,14 @@ class BaseFilterTool(BaseTool):
 
     def run(self, wordlist, *wordlists):
         words = self.wordlists2words(wordlist, *wordlists)
-        for word in words:
-            if self.__class__.func(word):
-                yield word
+        if inspect.ismethoddescriptor(self.__class__.func):
+            for word in words:
+                if self.__class__.func(word):
+                    yield word
+        else:
+            for word in words:
+                if self.func(word):
+                    yield word
 
 
 class IsdigitTool(BaseFilterTool):
