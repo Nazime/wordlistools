@@ -39,6 +39,8 @@ class BaseTool:
         elif wordlist is None:
             # 0 is fd for stdin
             # print("Wordlist is None")
+            # ignore stdin
+            sys.stdin.reconfigure(errors="ignore")
             for word in sys.stdin:
                 yield word[:-1]  # remove \n
         else:
