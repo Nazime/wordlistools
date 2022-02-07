@@ -26,6 +26,20 @@ but the principe remains the same.
 [![wordlistools demo](https://raw.githubusercontent.com/nazime/wordlistools/master/images/wordlistools.gif)](https://asciinema.org/a/430731)
 
 
+## Using policy subcommand
+You can filter your wordlist based on a policy, the policy follow the following format ``[base_policy][lenght_policy]``.
+The base policy can have the following rules:
+- a: word must contain at least one lower case letter
+- A: word must contain at least one upper case letter
+- 1: word must contain at least one digit
+- @: word must contain at least one special character
+
+length rule have an operator (==, !=, <=, >=, <, >) followed by its length. Example if we want
+to have passwords that have at least one lowercase, at least one upper case, at least one special
+character and its length is at least 10 characters long ``policy 'aA@>=10``. Do not forget
+to quote your arguments.
+
+![policy_cmd](https://raw.githubusercontent.com/nazime/wordlistools/master/images/policy_cmd.png)
 
 ## Add a tool
 
