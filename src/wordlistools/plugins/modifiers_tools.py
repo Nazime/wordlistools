@@ -71,3 +71,89 @@ class ReplaceTool(BaseTool):
         words = self.wordlists2words(wordlist, *wordlists)
         for word in words:
             yield word.replace(pattern, replace)
+
+
+class AddPrefixTool(BaseTool):
+    group = "modifiers"
+    name = "addprefix"
+    description = "Add prefix to string"
+
+    def init_parser(self):
+        self.add_argument("prefix", help="prefix to add")
+        self.add_argument(
+            "wordlists", help="wordlists to modify", nargs="+", stdin=True
+        )
+
+    def cmd(self, args):
+        return self.run(args.prefix, *args.wordlists)
+
+    def run(self, prefix, wordlist, *wordlists):
+        words = self.wordlists2words(wordlist, *wordlists)
+        for word in words:
+            yield prefix + word
+
+
+class AddSuffixTool(BaseTool):
+    group = "modifiers"
+    name = "addsuffix"
+    description = "Add suffix to string"
+
+    def init_parser(self):
+        self.add_argument("suffix", help="suffix to add")
+        self.add_argument(
+            "wordlists", help="wordlists to modify", nargs="+", stdin=True
+        )
+
+    def cmd(self, args):
+        return self.run(args.suffix, *args.wordlists)
+
+    def run(self, suffix, wordlist, *wordlists):
+        words = self.wordlists2words(wordlist, *wordlists)
+        for word in words:
+            yield word + suffix
+
+
+class RemovePrefixTool(BaseTool):
+    group = "modifiers"
+    name = "removeprefix"
+    description = "remove prefix from string"
+
+    def init_parser(self):
+        self.add_argument("removeprefix", help="prefix to remove")
+        self.add_argument(
+            "wordlists", help="wordlists to modify", nargs="+", stdin=True
+        )
+
+    def cmd(self, args):
+        return self.run(args.removeprefix, *args.wordlists)
+
+    def run(self, prefix, wordlist, *wordlists):
+        words = self.wordlists2words(wordlist, *wordlists)
+        for word in words:
+            if word.startswith(prefix):
+                yield word[len(prefix) :]  # noqa: E203
+            else:
+                yield word
+
+
+class RemoveSuffixTool(BaseTool):
+    group = "modifiers"
+    name = "removesuffix"
+    description = "Remove suffix from string"
+
+    def init_parser(self):
+        self.add_argument("removesuffix", help="suffix to remove")
+        self.add_argument(
+            "wordlists", help="wordlists to modify", nargs="+", stdin=True
+        )
+
+    def cmd(self, args):
+        return self.run(args.removesuffix, *args.wordlists)
+
+    def run(self, suffix, wordlist, *wordlists):
+        words = self.wordlists2words(wordlist, *wordlists)
+        for word in words:
+            if suffix and word.endswith(suffix):
+                yield word[: -len(suffix)]
+            else:
+                yield word

@@ -1,4 +1,4 @@
-VERSION = "0.1.7"
+VERSION = "0.1.8"
 AUTHOR = "Nazime"
 ASCII_ART = rf"""
  _    _               _ _ _     _              _

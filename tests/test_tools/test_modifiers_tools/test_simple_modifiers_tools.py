@@ -58,3 +58,36 @@ def test_replace():
         args=("test", "nop", AsStdinWordlist(["testtest", "testing", "tes"])),
         ret=AsWordlist(["nopnop", "noping", "tes"]),
     )
+
+
+def test_addprefix():
+
+    runtest(
+        "addprefix",
+        args=("z", AsStdinWordlist(["hello", "test", "A", ""])),
+        ret=AsWordlist(["zhello", "ztest", "zA", "z"]),
+    )
+
+
+def test_addsuffix():
+    runtest(
+        "addsuffix",
+        args=("a", AsStdinWordlist(["hello", "test", "A", ""])),
+        ret=AsWordlist(["helloa", "testa", "Aa", "a"]),
+    )
+
+
+def test_removeprefix():
+    runtest(
+        "removeprefix",
+        args=("z", AsStdinWordlist(["zhello", "ztest", "zA", "a"])),
+        ret=AsWordlist(["hello", "test", "A", "a"]),
+    )
+
+
+def test_removesuffix():
+    runtest(
+        "removesuffix",
+        args=("a", AsStdinWordlist(["helloa", "testa", "Aa", "b"])),
+        ret=AsWordlist(["hello", "test", "A", "b"]),
+    )

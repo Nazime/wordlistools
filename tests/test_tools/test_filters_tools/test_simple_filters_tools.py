@@ -29,6 +29,40 @@ def test_endswith():
     )
 
 
+def test_dontstartswith():
+    runtest(
+        "dontstartswith",
+        args=("a", AsStdinWordlist(["ab", "aa", "ba", "b"])),
+        ret=AsWordlist(["ba", "b"]),
+    )
+
+    runtest(
+        "dontstartswith",
+        args=("test", AsStdinWordlist(["ab", "aatest", "test"])),
+        ret=AsWordlist(["ab", "aatest"]),
+    )
+
+    runtest(
+        "dontstartswith", args=("test", AsStdinWordlist([""])), ret=AsWordlist([""])
+    )
+
+
+def test_dontendswith():
+    runtest(
+        "dontendswith",
+        args=("a", AsStdinWordlist(["ab", "aa", "ba"])),
+        ret=AsWordlist(["ab"]),
+    )
+
+    runtest(
+        "dontendswith",
+        args=("test", AsStdinWordlist(["ab", "testaa", "aatest"])),
+        ret=AsWordlist(["ab", "testaa"]),
+    )
+
+    runtest("dontendswith", args=("test", AsStdinWordlist([""])), ret=AsWordlist([""]))
+
+
 def test_isdigit():
     runtest(
         "isdigit",

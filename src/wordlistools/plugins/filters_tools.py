@@ -150,6 +150,48 @@ class EndswithTool(BaseTool):
                 yield word
 
 
+class DontStartsWithTool(BaseTool):
+    group = "filters"
+    name = "dontstartswith"
+    description = "Keep only words that doesn't start with a certain string"
+
+    def init_parser(self):
+        self.add_argument(
+            "string", help="String to check if the word doesn't start with it"
+        )
+        self.add_argument("wordlists", help="wordlist to return", stdin=True, nargs="+")
+
+    def cmd(self, args):
+        return self.run(args.string, *args.wordlists)
+
+    def run(self, string, wordlist, *wordlists):
+        words = self.wordlists2words(wordlist, *wordlists)
+        for word in words:
+            if not word.startswith(string):
+                yield word
+
+
+class DontEndsWithTool(BaseTool):
+    group = "filters"
+    name = "dontendswith"
+    description = "Keep only words that doesn't end with a certain string"
+
+    def init_parser(self):
+        self.add_argument(
+            "string", help="String to check if the word doesn't end with it"
+        )
+        self.add_argument("wordlists", help="wordlist to return", stdin=True, nargs="+")
+
+    def cmd(self, args):
+        return self.run(args.string, *args.wordlists)
+
+    def run(self, string, wordlist, *wordlists):
+        words = self.wordlists2words(wordlist, *wordlists)
+        for word in words:
+            if not word.endswith(string):
+                yield word
+
+
 class PolicyTool(BaseTool):
     group = "filters"
     name = "policy"
