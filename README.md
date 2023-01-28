@@ -36,7 +36,7 @@ The base policy can have the following rules:
 
 length rule have an operator (==, !=, <=, >=, <, >) followed by its length. Example if we want
 to have passwords that have at least one lowercase, at least one upper case, at least one special
-character and its length is at least 10 characters long ``policy 'aA@>=10``. Do not forget
+character and its length is at least 10 characters long ``policy 'aA@>=10'``. Do not forget
 to quote your arguments.
 
 ![policy_cmd](https://raw.githubusercontent.com/nazime/wordlistools/master/images/policy_cmd.png)

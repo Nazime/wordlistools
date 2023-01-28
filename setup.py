@@ -57,7 +57,7 @@ CLASSIFIERS = [
 # Packages information
 PACKAGES = find_packages(where="src")
 PACKAGE_DIR = {"": "src"}
-INSTALL_REQUIRES = ["argcomplete", "colorama", "koalak>=0.2.10"]
+INSTALL_REQUIRES = ["argcomplete", "colorama", "koalak>=0.2.15"]
 EXTRAS_REQUIRE = {
     "docs": ["sphinx"],
     "tests": [

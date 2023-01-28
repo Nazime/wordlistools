@@ -123,7 +123,7 @@ class ParseTool(BaseTool):
         self.add_argument(
             "type",
             help="Type of output to parse",
-            choices=list(parsers._plugins.keys()),
+            # choices=list(parsers._plugins.keys()),
         )
         #
         self.add_argument("input", help="input to parse", stdin=True)

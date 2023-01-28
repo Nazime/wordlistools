@@ -12,9 +12,9 @@ tools = wordlistools.mkpluginmanager("tools")
 
 @tools.mkbaseplugin
 class BaseTool:
-    description = tools.attr(type=str)
-    name = tools.attr(type=str)
-    group = "basic"
+    description: str = tools.field()
+    name: str = tools.field()
+    group: str = "basic"
     nb_outputs = 1
 
     def __init__(self):

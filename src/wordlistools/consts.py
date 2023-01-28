@@ -1,5 +1,5 @@
-VERSION = "0.1.8"
-AUTHOR = "Nazime"
+VERSION = "0.1.9"
+AUTHOR = "Nazime LAKEHAL"
 ASCII_ART = rf"""
  _    _               _ _ _     _              _
 | |  | |             | | (_)   | |            | |
