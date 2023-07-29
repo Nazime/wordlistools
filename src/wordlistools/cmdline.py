@@ -2,7 +2,7 @@ import argparse
 import sys
 import types
 
-from koalak import SubcommandParser
+from koalak.subcommand_parser import SubcommandParser
 from wordlistools import consts, tools
 
 
